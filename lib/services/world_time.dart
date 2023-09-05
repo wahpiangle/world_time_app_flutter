@@ -15,16 +15,16 @@ class WorldTime {
       Response response = await get(
         Uri.parse('https://www.timeapi.io/api/Time/current/zone?timeZone=$url'),
       );
+      print(response.body);
       Map data = jsonDecode(response.body);
       DateTime now = DateTime.parse(
         data['dateTime'],
       );
-      print(now);
       time = now.toString();
       return time;
     } catch (e) {
-      print('caught error: $e');
-      time = 'could not get time data';
+      print(e);
+      time = 'Could not get time data';
       return time;
     }
   }
