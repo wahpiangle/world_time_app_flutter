@@ -7,6 +7,7 @@ class WorldTime {
   String time = "";
   String flag;
   String url;
+  late bool isDayTime; //late means that the variable will be initialized later
 
   WorldTime({required this.location, required this.flag, required this.url});
 
@@ -21,6 +22,7 @@ class WorldTime {
         data['dateTime'],
       );
       time = DateFormat.jm().format(now);
+      isDayTime = now.hour > 6 && now.hour < 20 ? true : false;
       return time;
     } catch (e) {
       time = 'Could not get time data';
