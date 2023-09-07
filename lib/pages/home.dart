@@ -13,7 +13,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     // retrieve data from loading screen
-    data = ModalRoute.of(context)!.settings.arguments as Map;
+    data = data.isNotEmpty
+        ? data
+        : ModalRoute.of(context)!.settings.arguments as Map;
 
     String bgImage = data['isDayTime'] ? 'day.png' : 'night.png';
     Color? bgColor = data['isDayTime'] ? Colors.blue : Colors.indigo[700];
@@ -33,8 +35,17 @@ class _HomeState extends State<Home> {
               child: Column(
                 children: <Widget>[
                   TextButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/location');
+                    onPressed: () async {
+                      dynamic result = await Navigator.pushNamed(context,
+                          '/location'); //this result will store the data that is returned from the choose location screen
+                      setState(() {
+                        data = {
+                          'time': result['time'],
+                          'location': result['location'],
+                          'isDayTime': result['isDayTime'],
+                          'flag': result['flag'],
+                        };
+                      });
                     },
                     icon: Icon(
                       Icons.edit_location,
@@ -55,7 +66,7 @@ class _HomeState extends State<Home> {
                     children: <Widget>[
                       Text(
                         data['location'],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                           letterSpacing: 2,
                           color: Colors.white,
@@ -68,11 +79,19 @@ class _HomeState extends State<Home> {
                   ),
                   Text(
                     data['time'],
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 60,
                       color: Colors.white,
                     ),
                   ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Image(
+                    image: AssetImage('assets/${data['flag']}'),
+                    height: 100,
+                    width: 100,
+                  )
                 ],
               ),
             ),
