@@ -24,12 +24,14 @@ class _ChooseLocationState extends State<ChooseLocation> {
     WorldTime instance = locations[index];
     await instance.getTime();
     // to replace the loading screen
-    Navigator.pop(context, {
-      'location': instance.location,
-      'flag': instance.flag,
-      'time': instance.time,
-      'isDayTime': instance.isDayTime,
-    });
+    if (mounted) {
+      Navigator.pop(context, {
+        'location': instance.location,
+        'flag': instance.flag,
+        'time': instance.time,
+        'isDayTime': instance.isDayTime,
+      });
+    }
   }
 
   @override
